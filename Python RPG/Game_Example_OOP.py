@@ -35,7 +35,7 @@ class Goblin(Character):
 
     
     def print_status(self):
-        print (f"You have {self.health} health and {self.power} power.")
+        print (f"The Goblin has {self.health} health and {self.power} power.")
     
 
 # values of Hero and Goblins Health and Power
