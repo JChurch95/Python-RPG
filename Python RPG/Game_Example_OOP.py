@@ -15,6 +15,7 @@ class Character:
         print(f"{enemy.__class__.__name__}'s health is now {enemy.health}")
 
 
+
 # Classes of Hero and Goblin
 class Hero(Character):
     def __init__(self, health, power):
@@ -41,6 +42,7 @@ class Goblin(Character):
 # values of Hero and Goblins Health and Power
 hero = Hero(10, 5)
 goblin = Goblin(6, 3)
+
 
 
 # Listing our user choices and what happens if they select option 1, 2, or 3
