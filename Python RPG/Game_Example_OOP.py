@@ -4,6 +4,7 @@ class Character:
         self.health = health
         self.power = power
 
+# If the character's health is greater than 0, it will return True to being alive.
     def alive(self):
         return self.health > 0
     
@@ -12,8 +13,6 @@ class Character:
         enemy.health -= self.power
         print(f"{self.__class__.__name__} attacked {enemy.__class__.__name__}!")
         print(f"{enemy.__class__.__name__}'s health is now {enemy.health}")
-
-
 
 
 # Classes of Hero and Goblin
@@ -36,11 +35,12 @@ class Goblin(Character):
     
     def print_status(self):
         print (f"The Goblin has {self.health} health and {self.power} power.")
-    
+        
+
 
 # values of Hero and Goblins Health and Power
-hero = Hero(10, 6)
-goblin = Goblin(6, 2)
+hero = Hero(10, 5)
+goblin = Goblin(6, 3)
 
 
 # Listing our user choices and what happens if they select option 1, 2, or 3
@@ -59,14 +59,13 @@ while hero.alive() and goblin.alive():
         if not goblin.alive():
             print("The goblin is dead. The battle is over!")
      elif user_input == "2":
-              pass
+              if goblin.alive():
+                goblin.attack(hero)
      elif user_input == "3":
               print("Goodbye.")
      else:
         print(f"Invalid input {user_input}")
 
-if goblin.alive():
-    goblin.attack(hero)
 
 
 
