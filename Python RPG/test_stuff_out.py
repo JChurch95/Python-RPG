@@ -76,7 +76,7 @@ class Goblin(Character):
 
     def print_status(self):
         if self.alive():
-            print (f"The Goblin has {self.health} health and {self.power} power\n")
+            print (f"The Goblin has {self.health} health and {self.power} power.\n")
         
 
 # Class of Shadow 
@@ -85,7 +85,7 @@ class Shadow(Character):
         super().__init__(health, power, bounty)
 
     def print_status(self):
-        print (f"The Shadow has {self.health} health and {self.power} power\n")
+        print (f"The Shadow has {self.health} health and {self.power} power.\n")
 
 # Only 1 starting health but will only take damage about once out of every ten etimes he is attacked.
     def take_damage(self, amount):
@@ -102,7 +102,7 @@ class Zombie(Character):
         super().__init__(health, power, bounty)
 
     def print_status(self):
-        print (f"The Zombie has {self.health} health and {self.power} power\n")
+        print (f"The Zombie has {self.health} health and {self.power} power.\n")
 
 # Make the Zombie class not die if it's health reaches zero
     def alive(self):
@@ -116,7 +116,7 @@ class Archer(Character):
 
     def print_status(self):
         if self.alive():
-         print (f"The Archer has {self.health} health and {self.power} power\n")
+         print (f"The Archer has {self.health} health and {self.power} power.\n")
 
 
 # Class of Wizard
@@ -126,10 +126,10 @@ class Wizard(Character):
 
     def print_status(self):
         if self.alive():
-         print (f"The Wizard has {self.health} health and {self.power} power\n")
+         print (f"The Wizard has {self.health} health and {self.power} power.\n")
 
 # values Characters Health and Power
-hero = Hero(100, 10)
+hero = Hero(80, 10)
 goblin = Goblin(55, 8, 5)
 shadow = Shadow(15, 5, 6)
 zombie= Zombie(10, 7, 20)
@@ -212,13 +212,18 @@ while hero.alive():
             print(f"The {wizard.__class__.__name__} is already dead! Get your head in the game!\n")
     elif user_input == "6":
         print("He's just standing there... MENACINGLY!\n")
-        if goblin.alive(): goblin.attack(hero)
-        if shadow.alive(): shadow.attack(hero)
-        if zombie.alive(): zombie.attack(hero)
-        if archer.alive(): archer.attack(hero)
-        if wizard.alive(): wizard.attack(hero)
-        if not hero.alive(): print("Oh no, The Hero has died! Better luck next time! GAME OVER\n")
-        break
+        if goblin.alive():
+            goblin.attack(hero)
+        if shadow.alive():
+            shadow.attack(hero)
+        if zombie.alive():
+            zombie.attack(hero)
+        if archer.alive():
+            archer.attack(hero)
+        if wizard.alive():
+            wizard.attack(hero)
+        print()
+        print("Rub some dirt on it champ, and keep your head on a swivel!\n")
     elif user_input == "7":
         print("Throwing in the towel huh? I knew you couldn't handle it!\n")
         break
