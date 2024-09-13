@@ -17,8 +17,8 @@ class Character:
         if enemy.alive():
          damage = self.power
          enemy.health = max(0, enemy.health - damage)  # Prevent health from going negative
-         print(f"The {self.__class__.__name__} attacks the {enemy.__class__.__name__}!\n")
-         print(f"The {enemy.__class__.__name__}'s health is now {enemy.health}\n")
+         print(f"The {self.__class__.__name__} attacks the {enemy.__class__.__name__}!")
+         print(f"The {enemy.__class__.__name__}'s health is now {enemy.health}")
          if not enemy.alive():
             print(f"The {enemy.__class__.__name__} has been defeated!\n")
         else:
