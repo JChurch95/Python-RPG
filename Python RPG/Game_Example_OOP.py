@@ -108,8 +108,8 @@ class Hero(Character):
         if random.random() < 0.2:
             double_damage = self.power * 2
             enemy.health -= double_damage
-            print(f"The {self.__class__.__name__} musters all of his strength and strikes with double damage!\n")
-            print(f"The {enemy.__class__.__name__} takes {double_damage} damage!\n")
+            print(f"The {self.__class__.__name__} musters all of his strength and strikes with double damage!")
+            print(f"The {enemy.__class__.__name__} takes {double_damage} damage!")
         else:
             super().attack(enemy)
 
