@@ -1,5 +1,64 @@
-# Import random so we can use the function for the hero double damage attack
 import random
+
+# Base class for Items
+class Item:
+    def __init__(self, name, cost):
+        self.name = name
+        self.cost = cost
+
+    def apply(self, hero):
+        pass
+
+# Tonic class that adds 2 to the hero's health when applied
+class Tonic(Item):
+    def __init__(self):
+        super().__init__("Tonic", 10)
+
+    def apply(self, hero):
+        hero.health += 2
+        print(f"The {hero.__class__.__name__} uses the Tonic and gains 2 health! Health is now {hero.health}\n")
+
+# Sword class that adds 2 to the hero's power when applied
+class Sword(Item):
+    def __init__(self):
+        super().__init__("Sword", 20)
+
+    def apply(self, hero):
+        hero.power += 2
+        print(f"The {hero.__class__.__name__} wields the Sword and gains 2 power! Power is now {hero.power}\n")
+
+
+# Store class
+class Store:
+    items = [Tonic(), Sword()]  # Store items: Tonic and Sword
+
+    def do_shopping(self, hero):
+        while True:
+            print("=====================")
+            print("Welcome to the store!")
+            print("=====================")
+            print(f"You have {hero.coins} coins.")
+            print("What do you want to buy?")
+
+            for i, item in enumerate(Store.items):
+                print(f"{i + 1}. {item.name} ({item.cost} coins)")
+            print("9. Leave the store")
+
+            user_input = int(input("> "))
+
+            if user_input == 9:
+                print("Thanks for visiting the store!")
+                break
+            elif 1 <= user_input <= len(Store.items):
+                item_to_buy = Store.items[user_input - 1]
+
+                if hero.coins >= item_to_buy.cost:
+                    hero.buy(item_to_buy)
+                else:
+                    print("Sorry, you don't have enough coins to buy that item.")
+            else:
+                print("Invalid input, please try again.")
+
 
 # Create class Character that the classes of Hero and Goblin will pull from
 class Character:
@@ -17,8 +76,8 @@ class Character:
         if enemy.alive():
          damage = self.power
          enemy.health = max(0, enemy.health - damage)  # Prevent health from going negative
-         print(f"The {self.__class__.__name__} attacks the {enemy.__class__.__name__}!\n")
-         print(f"The {enemy.__class__.__name__}'s health is now {enemy.health}\n")
+         print(f"The {self.__class__.__name__} attacks the {enemy.__class__.__name__}!")
+         print(f"The {enemy.__class__.__name__}'s health is now {enemy.health}")
          if not enemy.alive():
             print(f"The {enemy.__class__.__name__} has been defeated!\n")
         else:
@@ -76,7 +135,7 @@ class Goblin(Character):
 
     def print_status(self):
         if self.alive():
-            print (f"The Goblin has {self.health} health and {self.power} power.\n")
+            print (f"The Goblin has {self.health} health and {self.power} power\n")
         
 
 # Class of Shadow 
@@ -85,7 +144,7 @@ class Shadow(Character):
         super().__init__(health, power, bounty)
 
     def print_status(self):
-        print (f"The Shadow has {self.health} health and {self.power} power.\n")
+        print (f"The Shadow has {self.health} health and {self.power} power\n")
 
 # Only 1 starting health but will only take damage about once out of every ten etimes he is attacked.
     def take_damage(self, amount):
@@ -102,7 +161,7 @@ class Zombie(Character):
         super().__init__(health, power, bounty)
 
     def print_status(self):
-        print (f"The Zombie has {self.health} health and {self.power} power.\n")
+        print (f"The Zombie has {self.health} health and {self.power} power\n")
 
 # Make the Zombie class not die if it's health reaches zero
     def alive(self):
@@ -116,7 +175,7 @@ class Archer(Character):
 
     def print_status(self):
         if self.alive():
-         print (f"The Archer has {self.health} health and {self.power} power.\n")
+         print (f"The Archer has {self.health} health and {self.power} power\n")
 
 
 # Class of Wizard
@@ -126,15 +185,17 @@ class Wizard(Character):
 
     def print_status(self):
         if self.alive():
-         print (f"The Wizard has {self.health} health and {self.power} power.\n")
+         print (f"The Wizard has {self.health} health and {self.power} power\n")
 
 # values Characters Health and Power
-hero = Hero(80, 10)
+hero = Hero(100, 10)
 goblin = Goblin(55, 8, 5)
 shadow = Shadow(15, 5, 6)
 zombie= Zombie(10, 7, 20)
 archer = Archer(25, 6, 10)
 wizard = Wizard(35, 15, 15)
+
+store = Store()  # Create a Store object
 
 # This will check if the characters are alive, and if they are, it  will print their status
 while hero.alive():
@@ -171,6 +232,7 @@ while hero.alive():
     print("5. Fight the Wizard")
     print("6. Do Nothing")
     print("7. Flee")
+    print("8. Visit the Store")  # Added option to visit the store
     print("> ", end="")
      
      
@@ -193,7 +255,8 @@ while hero.alive():
     elif user_input == "3":
         if zombie.alive():
             hero.attack(zombie)
-            zombie.attack(hero)
+            if zombie.alive():
+                zombie.attack(hero)
         else:
             print(f"The {zombie.__class__.__name__} is already dead! Get your head in the game!\n")
     elif user_input == "4":
@@ -212,21 +275,18 @@ while hero.alive():
             print(f"The {wizard.__class__.__name__} is already dead! Get your head in the game!\n")
     elif user_input == "6":
         print("He's just standing there... MENACINGLY!\n")
-        if goblin.alive():
-            goblin.attack(hero)
-        if shadow.alive():
-            shadow.attack(hero)
-        if zombie.alive():
-            zombie.attack(hero)
-        if archer.alive():
-            archer.attack(hero)
-        if wizard.alive():
-            wizard.attack(hero)
-        print()
-        print("Rub some dirt on it champ, and keep your head on a swivel!\n")
+        if goblin.alive(): goblin.attack(hero)
+        if shadow.alive(): shadow.attack(hero)
+        if zombie.alive(): zombie.attack(hero)
+        if archer.alive(): archer.attack(hero)
+        if wizard.alive(): wizard.attack(hero)
+        if not hero.alive(): print("Oh no, The Hero has died! Better luck next time! GAME OVER\n")
+        break
     elif user_input == "7":
         print("Throwing in the towel huh? I knew you couldn't handle it!\n")
         break
+    elif user_input == "8":
+        store.do_shopping(hero)  # Option to visit the store
     else:
         print(f"Uh Oh! Looks like you entered {user_input} instead of a selectable option. Try again!\n")
      

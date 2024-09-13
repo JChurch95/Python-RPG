@@ -1,5 +1,64 @@
-# Import random so we can use the function for the hero double damage attack
 import random
+
+# Base class for Items
+class Item:
+    def __init__(self, name, cost):
+        self.name = name
+        self.cost = cost
+
+    def apply(self, hero):
+        pass
+
+# Tonic class that adds 2 to the hero's health when applied
+class Tonic(Item):
+    def __init__(self):
+        super().__init__("Tonic", 10)
+
+    def apply(self, hero):
+        hero.health += 2
+        print(f"The {hero.__class__.__name__} uses the Tonic and gains 2 health! Health is now {hero.health}\n")
+
+# Sword class that adds 2 to the hero's power when applied
+class Sword(Item):
+    def __init__(self):
+        super().__init__("Sword", 20)
+
+    def apply(self, hero):
+        hero.power += 2
+        print(f"The {hero.__class__.__name__} wields the Sword and gains 2 power! Power is now {hero.power}\n")
+
+
+# Store class
+class Store:
+    items = [Tonic(), Sword()]  # Store items: Tonic and Sword
+
+    def do_shopping(self, hero):
+        while True:
+            print("=====================")
+            print("Welcome to the store!")
+            print("=====================")
+            print(f"You have {hero.coins} coins.")
+            print("What do you want to buy?")
+
+            for i, item in enumerate(Store.items):
+                print(f"{i + 1}. {item.name} ({item.cost} coins)")
+            print("9. Leave the store")
+
+            user_input = int(input("> "))
+
+            if user_input == 9:
+                print("Thanks for visiting the store!")
+                break
+            elif 1 <= user_input <= len(Store.items):
+                item_to_buy = Store.items[user_input - 1]
+
+                if hero.coins >= item_to_buy.cost:
+                    hero.buy(item_to_buy)
+                else:
+                    print("Sorry, you don't have enough coins to buy that item.")
+            else:
+                print("Invalid input, please try again.")
+
 
 # Create class Character that the classes of Hero and Goblin will pull from
 class Character:
@@ -136,6 +195,8 @@ zombie= Zombie(10, 7, 20)
 archer = Archer(25, 6, 10)
 wizard = Wizard(35, 15, 15)
 
+store = Store()  # Create a Store object
+
 # This will check if the characters are alive, and if they are, it  will print their status
 while hero.alive():
     print()
@@ -171,6 +232,7 @@ while hero.alive():
     print("5. Fight the Wizard")
     print("6. Do Nothing")
     print("7. Flee")
+    print("8. Visit the Store")  # Added option to visit the store
     print("> ", end="")
      
      
@@ -193,7 +255,8 @@ while hero.alive():
     elif user_input == "3":
         if zombie.alive():
             hero.attack(zombie)
-            zombie.attack(hero)
+            if zombie.alive():
+                zombie.attack(hero)
         else:
             print(f"The {zombie.__class__.__name__} is already dead! Get your head in the game!\n")
     elif user_input == "4":
@@ -222,6 +285,8 @@ while hero.alive():
     elif user_input == "7":
         print("Throwing in the towel huh? I knew you couldn't handle it!\n")
         break
+    elif user_input == "8":
+        store.do_shopping(hero)  # Option to visit the store
     else:
         print(f"Uh Oh! Looks like you entered {user_input} instead of a selectable option. Try again!\n")
      
