@@ -1,208 +1,117 @@
-# Import random so we can use the function for the hero's double damage attack
-import random
+from PIL import Image, ImageDraw, ImageFont
+import io
 
-# Create class Character that the Hero and Goblin classes will inherit from
-class Character:
-    def __init__(self, health, power, bounty=0):
-        self.health = health
-        self.power = power
-        self.bounty = bounty
+# ASCII art string
+ascii_art = """                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                `x!                                                 
+                                                0$hi                                                
+                                                %$$}                                                
+                                               .n$d:                                                
+                                                +$X                                                 
+                                                !$x                                                 
+                                                I$r                                                 
+                                                l$r                                                 
+                                                >$u                                                 
+                                             :!+x$q+!;.                                             
+                                             w@@@$$@@B;                                             
+                                              ,w$$$@!.                                              
+                "                              X$$$M                                                
+                OoLf-,.            ."i?]-!`    ~@$$c                           .i(Y<                
+                Ia$$$@MqCcnxxnvYQqa8@$$$$$%Q:  ,UUU?   Ix0b*#b0Xr|}+iI,",l<[tXp8$$w.                
+                 ,\vCwa8@@$$$$$$@$@Wah*@$$$${lL%$$$@d[ o$$$$$@$$$$$$$@$$@$$$$$@B*Y"                 
+                 _k&opOUUL0QCucJcntjvJZ[Q$$*]&$$$$$$$@xm$$@Cvu/|/nJZdaahq0CYcunun>                  
+                 ~8$$$$$$@*mCx?@@$$@&mu(-&8+M$$$$$$$$$$\#$L:d@$@@%&Mp-qa&@$$$$$$$b.                 
+                  ixunxf\(tc0Q]_XUzncmWBudCj$$$$$$$$$$$p1$t*CjjnCk8b]n|]]|uLwbhoZI                  
+                  ^&$$$$$%wj_/wj@$$$@dj1;hnq$$$$$$$$$$$@<$+)ZB$@#p0/|-/m%8odZO00~                   
+                  .C@MZn1{upBd/{Y8wj-jkM}@x*$$$$$$$$$$$$-$nQY]\mB@@(u8bx?{zkB@$$\                   
+                    >u0o@$BQ{uWW;inb@@C[1Bzo$$$$$$$$$$$$]$L<p@au]{-zb(r*@8wc\/j}.                   
+                    O$$$Wc\QB@Cfpu&oz1LBtzwq$$$$$$$$$$$@{@)Wx/b@@h{}q@af/q@$$$#,                    
+                    ~pd/j*$@0jb$B{,fq@W(wfqY$$$$$$$$$$$*rXut8Wu{|~B@Cja@%QfJ%@*,                    
+                      +#@%U1O@@0-m|&@J?h811f$$$$$$$$$$$Cx!*b]q@@v\|k@%c|d@@w[?"                     
+                      <0x{O@$%t{M@t<+nBB|on+$$$$$$$$$$$tlW(%&|(C-@a+u@$Wx1OBq.                      
+                        :8$@O?0$%1\w[B%(p*\C%Ym%@$$$kYawtwk)%@Z?/\BBc]a@$%+".                       
+                        _#h}\8$%]vB?1~lmM}ZCO. ,z$b>. )%r)*b1X<l&r?%$*}r8$O                         
+                          `J@$Btq@uq&?QiIn/v&! >d8&1.`Zo>#_j[!d0\@01%$@zl1!                         
+                          `Q@#vM@Ja@(w8<8)I~@%M@B!0$&W$v.<x]dh]@Xz@*u%@@|                           
+                            ^:&%na$Of@nU@}W\0@%$k]t$BBW;C-&d}@Xz$oc@%\/].                           
+                              !!^uUi8a-@ZU$x`;z$%@8@#",;@bu@)m@]w@f?J~                              
+                                   ?z<m%?BBl  0@$$@$@` .a$|M#>*w`:                                  
+                                     .c_x@c   X0Qfm#n;  )@q]#}..                                    
+                                       .op`   `;vuc?`.  .0@!.                                       
+                                       -b,     l$$$t     "dc                                        
+                                       ,^      !$$$f      ,t                                        
+                                               !$$$f                                                
+                                               !$$$f                                                
+                                               !$$$j                                                
+                                               I$$$t                                                
+                                               `B$$}                                                
+                                                h$@l                                                
+                                                Y$W.                                                
+                                                }$J                                                 
+                                                .m!                                                 
+                                                 .                                                  
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    """
 
-    # Check if the character is alive
-    def alive(self):
-        return self.health > 0
-
-    # Attack method for the characters
-    def attack(self, enemy):
-        if enemy.alive():
-            damage = self.power
-            enemy.health = max(0, enemy.health - damage)  # Prevent health from going negative
-            print(f"The {self.__class__.__name__} attacks the {enemy.__class__.__name__}!")
-            print(f"The {enemy.__class__.__name__}'s health is now {enemy.health}")
-            
-            if not enemy.alive():
-                print(f"The {enemy.__class__.__name__} has been defeated!\n")
-        else:
-            print(f"The {enemy.__class__.__name__} is already dead!\n")
-
-    # Taking damage
-    def take_damage(self, damage):
-        self.health -= damage
-
-    # Coins attribute with a default value of 20
-    def coins(self, coins=20):
-        self.coins = coins
-
-
-# Hero class
-class Hero(Character):
-    def __init__(self, health, power, coins=20):
-        super().__init__(health, power, bounty=0)
-        self.coins = coins  # Initialize hero with some starting coins
-
-    def print_status(self):
-        if self.alive():
-            print(f"The Hero has {self.health} health and {self.power} power.\n")
-        else:
-            print("GAME OVER\n")
-
-    # Hero's attack with a chance of double damage (20%)
-    def attack(self, enemy):
-        if random.random() < 0.2:
-            double_damage = self.power * 2
-            enemy.health -= double_damage
-            print(f"The {self.__class__.__name__} strikes with double damage!")
-            print(f"The {enemy.__class__.__name__} takes {double_damage} damage!\n")
-        else:
-            super().attack(enemy)
-
-        # If enemy is defeated, reward the hero with coins
-        if not enemy.alive():
-            print(f"You defeated the {enemy.__class__.__name__} and earned {enemy.bounty} coins!")
-            self.coins += enemy.bounty  # Add bounty to hero's coins
-            print(f"You now have {self.coins} coins.\n")
-
-    # Buying items from a store
-    def buy(self, item):
-        self.coins -= item.cost
-        item.apply(self)
-
-
-# Goblin class
-class Goblin(Character):
-    def __init__(self, health, power, bounty=5):
-        super().__init__(health, power, bounty)
-
-    def print_status(self):
-        if self.alive():
-            print(f"The Goblin has {self.health} health and {self.power} power\n")
-
-
-# Shadow class
-class Shadow(Character):
-    def __init__(self, health, power, bounty=6):
-        super().__init__(health, power, bounty)
-
-    def print_status(self):
-        print(f"The Shadow has {self.health} health and {self.power} power\n")
-
-    # Shadow takes damage only half the time
-    def take_damage(self, amount):
-        if random.random() < 0.5:
-            self.health -= amount
-            print(f"The Shadow takes {amount} damage!\n")
-        else:
-            print("The Shadow dodged your attack!\n")
-
-
-# Zombie class
-class Zombie(Character):
-    def __init__(self, health, power, bounty=20):
-        super().__init__(health, power, bounty)
-
-    def print_status(self):
-        print(f"The Zombie has {self.health} health and {self.power} power\n")
-
-    # Zombies never die!
-    def alive(self):
-        return True
-
-
-# Archer class
-class Archer(Character):
-    def __init__(self, health, power, bounty=10):
-        super().__init__(health, power, bounty)
-
-    def print_status(self):
-        if self.alive():
-            print(f"The Archer has {self.health} health and {self.power} power\n")
-
-
-# Wizard class
-class Wizard(Character):
-    def __init__(self, health, power, bounty=15):
-        super().__init__(health, power, bounty)
-
-    def print_status(self):
-        if self.alive():
-            print(f"The Wizard has {self.health} health and {self.power} power\n")
-
-
-# Function to handle a fight between hero and enemy
-def handle_fight(hero, enemy):
-    if enemy.alive():
-        hero.attack(enemy)
-        if enemy.alive():
-            enemy.attack(hero)
-    else:
-        print(f"The {enemy.__class__.__name__} is already dead! Get your head in the game!\n")
-
-
-# Instantiate the characters
-hero = Hero(100, 10)
-goblin = Goblin(55, 8)
-shadow = Shadow(15, 5)
-zombie = Zombie(10, 7)
-archer = Archer(25, 6)
-wizard = Wizard(35, 15)
-
-# Main game loop
-while hero.alive():
-    print()
-    hero.print_status()
+def ascii_to_image(ascii_str, output_filename="ascii_art.png", scale_factor=0.5):
+    # Split the ASCII art into lines
+    lines = ascii_str.split('\n')
     
-    if goblin.alive(): goblin.print_status()
-    else: print("The puny Goblin was no match for you\n")
+    # Calculate image dimensions
+    char_width, char_height = int(5 * scale_factor), int(9 * scale_factor)  # Reduced character size
+    width = max(len(line) for line in lines) * char_width
+    height = len(lines) * char_height
+    
+    # Create a new image with white background
+    image = Image.new('RGB', (width, height), color='white')
+    draw = ImageDraw.Draw(image)
+    
+    try:
+        # Try to use a monospace font with reduced size
+        font_size = int(8 * scale_factor)  # Reduced font size
+        font = ImageFont.truetype("Courier", font_size)
+    except IOError:
+        # If the above font is not available, use the default font
+        font = ImageFont.load_default()
+    
+    # Draw each character of the ASCII art
+    y = 0
+    for line in lines:
+        x = 0
+        for char in line:
+            if char != ' ':
+                draw.text((x, y), char, fill='black', font=font)
+            x += char_width
+        y += char_height
+    
 
-    if shadow.alive(): shadow.print_status()
-    else: print("The Shadow could not escape your fury\n")
+# Create the image with a smaller scale
+ascii_to_image(ascii_art, scale_factor=0.5)
 
-    if zombie.alive(): zombie.print_status()
-    else: print("You just broke the game! WOO HOO!\n")
-
-    if archer.alive(): archer.print_status()
-    else: print("You hit the archer from HOW FAR?!\n")
-
-    if wizard.alive(): wizard.print_status()
-    else: print("Cordless Hole Punchers don't care about no spells son!\n")
-
-    print("What do you want to do?\n")
-    print("1. Fight Goblin")
-    print("2. Fight the Shadow")
-    print("3. Fight the Zombie")
-    print("4. Fight the Archer")
-    print("5. Fight the Wizard")
-    print("6. Do Nothing")
-    print("7. Flee")
-    print("> ", end="")
-     
-    user_input = input().strip()
-    print()
-
-    if user_input == "1":
-        handle_fight(hero, goblin)
-    elif user_input == "2":
-        handle_fight(hero, shadow)
-    elif user_input == "3":
-        handle_fight(hero, zombie)
-    elif user_input == "4":
-        handle_fight(hero, archer)
-    elif user_input == "5":
-        handle_fight(hero, wizard)
-    elif user_input == "6":
-        print("He's just standing there... MENACINGLY!\n")
-        if goblin.alive(): goblin.attack(hero)
-        if shadow.alive(): shadow.attack(hero)
-        if zombie.alive(): zombie.attack(hero)
-        if archer.alive(): archer.attack(hero)
-        if wizard.alive(): wizard.attack(hero)
-        print("Rub some dirt on it champ, and keep your head on a swivel!\n")
-    elif user_input == "7":
-        print("Throwing in the towel huh? I knew you couldn't handle it!\n")
-        break
-    else:
-        print(f"Uh Oh! Looks like you entered {user_input} instead of a selectable option. Try again!\n")
-     
-    if not hero.alive():
-        print("Oh no, The Hero has died! Better luck next time! GAME OVER\n")
-        break
+print(ascii_art)

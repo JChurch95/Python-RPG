@@ -148,7 +148,7 @@ class Shadow(Character):
 
 # Only 1 starting health but will only take damage about once out of every ten etimes he is attacked.
     def take_damage(self, amount):
-        if random.random() < 0.5:
+        if random.random() < 0.2:
             self.health -= amount
             print(f"The Shadow takes {amount} of damage!\n")
         else:
